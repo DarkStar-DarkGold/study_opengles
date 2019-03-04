@@ -23,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		570711C9222CD5C900925EB2 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = "../../纹理stb/纹理stb/stb_image.h"; sourceTree = "<group>"; };
 		57A9F8EE217DC55F000C5F7D /* HelloOpenGL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloOpenGL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57A9F8F1217DC55F000C5F7D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		57A9F8F2217DC55F000C5F7D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				57A9F8F1217DC55F000C5F7D /* AppDelegate.h */,
+				570711C9222CD5C900925EB2 /* stb_image.h */,
 				57A9F8F2217DC55F000C5F7D /* AppDelegate.m */,
 				57A9F8F4217DC55F000C5F7D /* ViewController.h */,
 				57A9F8F5217DC55F000C5F7D /* ViewController.m */,

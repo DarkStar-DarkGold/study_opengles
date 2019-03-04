@@ -179,7 +179,7 @@
     _texCoordSlot   = glGetAttribLocation(_programHandle, "TexCoordIn");
     
     glEnableVertexAttribArray(_texCoordSlot);
-    _ourTextureSlot = glGetUniformLocation(_programHandle, "ourTexture");
+   // _ourTextureSlot = glGetUniformLocation(_programHandle, "ourTexture");
     
 //    _textureID = [KYTexture getTextureImage:[UIImage imageNamed:@"timg.jpg"]];
 
