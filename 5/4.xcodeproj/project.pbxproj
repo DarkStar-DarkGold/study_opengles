@@ -19,6 +19,8 @@
 		571F875821AB948100ED2332 /* frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 571F875721AB948100ED2332 /* frag.glsl */; };
 		571F875B21AB949000ED2332 /* YView.m in Sources */ = {isa = PBXBuildFile; fileRef = 571F875A21AB949000ED2332 /* YView.m */; };
 		571F875E21AB962F00ED2332 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 571F875D21AB962F00ED2332 /* utils.m */; };
+		57D0AE33222E604000D2508B /* l.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 57D0AE31222E604000D2508B /* l.PNG */; };
+		57D0AE34222E604000D2508B /* n.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 57D0AE32222E604000D2508B /* n.PNG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		571F875A21AB949000ED2332 /* YView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YView.m; sourceTree = "<group>"; };
 		571F875C21AB962F00ED2332 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		571F875D21AB962F00ED2332 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
+		57D0AE31222E604000D2508B /* l.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l.PNG; sourceTree = "<group>"; };
+		57D0AE32222E604000D2508B /* n.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = n.PNG; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,8 @@
 				571F875921AB949000ED2332 /* YView.h */,
 				571F875A21AB949000ED2332 /* YView.m */,
 				571F874221AB945F00ED2332 /* Main.storyboard */,
+				57D0AE32222E604000D2508B /* n.PNG */,
+				57D0AE31222E604000D2508B /* l.PNG */,
 				571F874821AB946000ED2332 /* Assets.xcassets */,
 				571F874A21AB946000ED2332 /* LaunchScreen.storyboard */,
 				571F874D21AB946000ED2332 /* Info.plist */,
@@ -153,11 +159,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				571F874C21AB946000ED2332 /* LaunchScreen.storyboard in Resources */,
+				57D0AE33222E604000D2508B /* l.PNG in Resources */,
 				571F875621AB947600ED2332 /* ver.glsl in Resources */,
 				570711CC222CD6CF00925EB2 /* test2Ret.jpg in Resources */,
 				571F874921AB946000ED2332 /* Assets.xcassets in Resources */,
 				571F875821AB948100ED2332 /* frag.glsl in Resources */,
 				571F874421AB945F00ED2332 /* Main.storyboard in Resources */,
+				57D0AE34222E604000D2508B /* n.PNG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

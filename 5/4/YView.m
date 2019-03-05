@@ -1,6 +1,6 @@
 //
 //  YView.m
-//  3
+//  5
 //
 //  Created by wangkaiyu on 2018/11/26.
 //  Copyright © 2018 wangkaiyu. All rights reserved.
@@ -27,6 +27,8 @@
     GLuint _colorY;
     GLuint _texc;
     GLuint _tex1;
+    GLuint _color;
+
 
 
 
@@ -99,6 +101,8 @@
     _positionY = glGetAttribLocation(_programY, "Yposition");
     _texc = glGetAttribLocation(_programY, "tec");
     _colorY = glGetUniformLocation(_programY, "tex");
+    _color = glGetAttribLocation(_programY, "color");
+
 }
 
 -(void)render{
@@ -115,44 +119,80 @@
         
         
     };
-    GLfloat color[] = {  // opengles 以屏幕中心为原点。
-        -1.0f,0.0f,
-        0.0f,1.0f,
-        0.0f,-1.0f,
-        1.0f,0.0f,
+    GLfloat colCoord[] = {  // opengles 以屏幕中心为原点。
+        0.0,0.5f,
+        0.5f,1.0f,
+        0.5f,0.0f,
+        1.0f,0.5f,
        
     };
+    
+    GLfloat color[] = {  // opengles 颜色
+      1.0,0.0,0.0,1.0,
+      0.0,1.0,0.0,1.0,
+      0.0,0.0,1.0,1.0,
+      0.0,0.0,0.0,1.0
+    };
+    
+    GLuint indexs[] = {
+        0,1,2,
+        1,3,2
+    };
+    
     GLuint VAO;
     GLuint VBO;
     GLuint VBO2;
+    GLuint VBO3;
+    GLuint EBO;
+
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-    
     glVertexAttribPointer(_positionY, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)0);
     glEnableVertexAttribArray(_positionY);
+    
     glGenBuffers(1, &VBO2);
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colCoord), colCoord, GL_STATIC_DRAW);
     glVertexAttribPointer(_texc, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)0);
     glEnableVertexAttribArray(_texc);
 
+    glGenBuffers(1, &VBO3);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO3);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
+    glVertexAttribPointer(_color, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(_color);
+    
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,  sizeof(indexs), indexs, GL_STATIC_DRAW );
     
     glGenTextures(1, &_tex1);
     glBindTexture(GL_TEXTURE_2D, _tex1);
     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
+    /**glTexParameteri：1，2，3
+     * @brief
+     * @param1  纹理目标这里用的h是2D纹理
+     * @param2  2d的s，t 相当于x，y
+     * @param3  环绕方式GL_CLAMP_TO_EDGE。GL_REPEAT  GL_MIRRORED_REPEAT 下边注释解析
+     * @return 无返回.
+    */
+    // GL_REPEAT  重复图片
+    //GL_CLAMP_TO_EDGE  纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。
+    // GL_MIRRORED_REPEAT 和GL_REPEAT一样，但每次重复图片是镜像放置的。
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);    // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // set texture filtering parameters // 目录里n和l分别对应near和line的效果
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // GL_NEAREST
+    //
     // load image, create texture and generate mipmaps
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     const char *path = [[[NSBundle mainBundle]pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
     unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
     if (data)
@@ -166,11 +206,12 @@
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE0, _tex1);
-    glUniform1i(_colorY, 0);
+    glUniform1i(_colorY, 0); // 关于这句话的意思 ，百度了很多，最简洁的应该就是说只是告诉着色器去哪个e纹理单元采样罢了。
 
     glUseProgram(_programY);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     //    glDrawArrays(GL_LINES, 0, 4);  // 十字 不连接
@@ -182,13 +223,6 @@
     
     [_cont presentRenderbuffer:_renderBuffer];
 }
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
 @end
 
