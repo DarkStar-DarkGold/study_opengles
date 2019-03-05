@@ -38,14 +38,14 @@ typedef struct {
 //    2, 3, 0
 //};
 const Vertex Vertices[] = {
-    {{1, -1, 1}, {1, 0, 0, 1}},
-    {{1, 1, 1}, {1, 0, 0, 1}},
-    {{-1, 1, 1}, {0, 1, 0, 1}},
-    {{-1, -1, 1}, {0, 1, 0, 1}},
-    {{1, -1, -1}, {1, 0, 0, 1}},
-    {{1, 1, -1}, {1, 0, 0, 1}},
-    {{-1, 1, -1}, {0, 1, 0, 1}},
-    {{-1, -1, -1}, {0, 1, 0, 1}}
+    {{0.5, -0.5, 0.5}, {0, 0, 1, 1}},
+    {{0.5, 0.5, 0.5}, {0, 0, 1, 1}},
+    {{-0.5, 0.5, 0.5}, {0, 1, 0, 1}},
+    {{-0.5, -0.5, 0.5}, {0, 1, 0, 1}},
+    {{0.5, -0.5, -0.5}, {0, 0, 1, 1}},
+    {{0.5, 0.5, -0.5}, {0, 0, 1, 1}},
+    {{-0.5, 0.5, -0.5}, {0, 1, 0, 1}},
+    {{-0.5, -0.5, -0.5}, {0, 1, 0, 1}}
 };
 
 const GLubyte Indices[] = {
@@ -217,8 +217,7 @@ const GLubyte Indices[] = {
 }
 
 - (void)render:(CADisplayLink*)displayLink {
-
-    glClearColor(0.0, 104.0/255.0, 55.0/255.0, 1.0);
+    glClearColor(1.0, 0.0/255.0, 0.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
   
@@ -230,10 +229,10 @@ const GLubyte Indices[] = {
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 //    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -10.0f);
     GLKMatrix4 mvp = GLKMatrix4Multiply(projectionMatrix,modelViewMatrix);
-//    _currentRotation += displayLink.duration *90;
+    _currentRotation += displayLink.duration *90;
     
 
-    mvp = GLKMatrix4RotateY(mvp, GLKMathDegreesToRadians(45)); // 缩放 旋转 平移
+    mvp = GLKMatrix4RotateY(mvp, GLKMathDegreesToRadians(_currentRotation)); // 缩放 旋转 平移
 //    mvp = GLKMatrix4Translate(mvp ,-4.5f, 0.0f, 0.0f); // 平移的话就动了坐标轴了。
 //    mvp = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
 
