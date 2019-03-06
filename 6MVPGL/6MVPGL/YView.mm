@@ -33,13 +33,14 @@
     GLuint _v;
     GLuint _p;
 
+
 }
 
 @end
 
 
 @implementation YView
-
+float a = 0;
 +(Class)layerClass
 {
     return [CAEAGLLayer class];
@@ -82,6 +83,7 @@
 {
     glGenRenderbuffers(1, &(_renderBuffer));
     glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_COLOR_ATTACHMENT0, self.frame.size.width, self.frame.size.height);
     [_cont renderbufferStorage:GL_RENDERBUFFER fromDrawable:_layer];
 }
 - (void)setupDepthBuffer {
@@ -128,7 +130,6 @@
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
-float a = 0.0;
 -(void)render:(CADisplayLink*)displayLink
 {
     const char *path = [[[NSBundle mainBundle] pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
@@ -241,33 +242,33 @@ float a = 0.0;
         
     };
     // Model View  Projection
-    M3DMatrix44f _model;
-    m3dLoadIdentity44(_model);
-    M3DMatrix44f _model_copy;
-    m3dLoadIdentity44(_model_copy);
-    // scale
-    M3DMatrix44f s;
-    m3dLoadIdentity44(s);
-    m3dScaleMatrix44(s, 0.5,0.5,0.5);
-    m3dCopyMatrix44(_model_copy, _model);
-    m3dMatrixMultiply44(_model, s, _model_copy);
-//    // rotate
-    a += 2.0;
-    M3DMatrix44f r_matrix_init;
-    m3dRotationMatrix44(r_matrix_init, m3dDegToRad(a),  1.0, 0.0, 0.0);
-    m3dCopyMatrix44(_model_copy, _model);
-    m3dMatrixMultiply44(_model, r_matrix_init, _model_copy);
-//    // tran
-    M3DMatrix44f translation_init;
-    m3dLoadIdentity44(translation_init);
-    translation_init[12] = 0.0;
-    translation_init[13] = 0.0;
-    translation_init[14] = 0.0;
-    //m3dTranslationMatrix44(translation_init, 1.0, 1.0, 0.0);
-    m3dCopyMatrix44(_model_copy, _model);
-    m3dMatrixMultiply44(_model, translation_init, _model_copy);
-    std::cout << _model[12] << _model[13] << _model[14] << std::endl;
-    glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
+//    M3DMatrix44f _model;
+//    m3dLoadIdentity44(_model);
+//    M3DMatrix44f _model_copy;
+//    m3dLoadIdentity44(_model_copy);
+//    // scale
+//    M3DMatrix44f s;
+//    m3dLoadIdentity44(s);
+//    m3dScaleMatrix44(s, 0.5,0.5,0.5);
+//    m3dCopyMatrix44(_model_copy, _model);
+//    m3dMatrixMultiply44(_model, s, _model_copy);
+////    // rotate
+//    a += 2.0;
+//    M3DMatrix44f r_matrix_init;
+//    m3dRotationMatrix44(r_matrix_init, m3dDegToRad(a),  1.0, 0.0, 0.0);
+//    m3dCopyMatrix44(_model_copy, _model);
+//    m3dMatrixMultiply44(_model, r_matrix_init, _model_copy);
+////    // tran
+//    M3DMatrix44f translation_init;
+//    m3dLoadIdentity44(translation_init);
+//    translation_init[12] = 0.0;
+//    translation_init[13] = 0.0;
+//    translation_init[14] = 0.0;
+//    //m3dTranslationMatrix44(translation_init, 1.0, 1.0, 0.0);
+//    m3dCopyMatrix44(_model_copy, _model);
+//    m3dMatrixMultiply44(_model, translation_init, _model_copy);
+//    std::cout << _model[12] << _model[13] << _model[14] << std::endl;
+//    glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
 
 //
     M3DMatrix44f mViewMatrix;
@@ -358,9 +359,54 @@ float a = 0.0;
     glBindTexture(GL_TEXTURE_2D, texture0);
     glUniform1i(_tex, 0);
     
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    //glDrawArrays(GL_TRIANGLES, 0, 36);
+
+    float arr[] = {
+      0.0,-1.0
+    };
     
-    [_cont presentRenderbuffer:_renderBuffer];
+    for(unsigned int i = 0; i < 2; i++)
+    {
+    
+//        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //// Model View  Projection
+        M3DMatrix44f _model;
+        m3dLoadIdentity44(_model);
+        M3DMatrix44f _model_copy;
+        m3dLoadIdentity44(_model_copy);
+        // scale
+//        M3DMatrix44f s;
+//        m3dLoadIdentity44(s);
+//        m3dScaleMatrix44(s, 0.5,0.5,0.5);
+//        m3dCopyMatrix44(_model_copy, _model);
+//        m3dMatrixMultiply44(_model, s, _model_copy);
+        //    // rotate
+        a += 2.0 * i;
+        M3DMatrix44f r_matrix_init;
+        m3dRotationMatrix44(r_matrix_init, m3dDegToRad(a),  1.0, 0.3, 0.5);
+        m3dCopyMatrix44(_model_copy, _model);
+        m3dMatrixMultiply44(_model, r_matrix_init, _model_copy);
+        //    // tran
+        M3DMatrix44f translation_init;
+        m3dLoadIdentity44(translation_init);
+        translation_init[12] = arr[i];
+        translation_init[13] = arr[i];
+        translation_init[14] = arr[i];
+        //m3dTranslationMatrix44(translation_init, 1.0, 1.0, 0.0);
+        m3dCopyMatrix44(_model_copy, _model);
+        m3dMatrixMultiply44(_model, translation_init, _model_copy);
+        glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
+        //glm::mat4 model;
+//        model = glm::translate(model, cubePositions[i]);
+//        float angle = 20.0f * i;
+//        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+//        ourShader.setMat4("model", model);
+//a
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+         [_cont presentRenderbuffer:_renderBuffer];
+    }
+    
+   // [_cont presentRenderbuffer:_renderBuffer];
 }
 
 @end
