@@ -401,7 +401,7 @@ float a = 0;
 //        float angle = 20.0f * i;
 //        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 //        ourShader.setMat4("model", model);
-//a
+
         glDrawArrays(GL_TRIANGLES, 0, 36);
          [_cont presentRenderbuffer:_renderBuffer];
     }
