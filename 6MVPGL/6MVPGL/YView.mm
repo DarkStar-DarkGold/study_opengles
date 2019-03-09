@@ -130,6 +130,10 @@ float a = 0;
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
+//float redius = 10.0;
+float redius_z = -10.0;
+
+
 -(void)render:(CADisplayLink*)displayLink
 {
     const char *path = [[[NSBundle mainBundle] pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
@@ -270,19 +274,65 @@ float a = 0;
 //    std::cout << _model[12] << _model[13] << _model[14] << std::endl;
 //    glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
 
-//
+    float redius=0.0;
+    redius_z+=0.1;
+    
+    
     M3DMatrix44f mViewMatrix;
-    m3dLoadIdentity44(mViewMatrix);
-    m3dTranslationMatrix44(mViewMatrix, 0.0, 0.0, -3.0);
-    glUniformMatrix4fv(_v, 1, GL_FALSE,mViewMatrix);
+//    m3dLoadIdentity44(mViewMatrix);
+//    m3dTranslationMatrix44(mViewMatrix, redius, 0.0, redius_z);
+   
 //
     M3DMatrix44f mProjection;
     m3dLoadIdentity44(mProjection);
     m3dMakePerspectiveMatrix(mProjection, 45.0 * 3.14 /180.0, 720.0/1280.0, 0.1, 100);
     glUniformMatrix4fv(_p, 1, GL_FALSE,mProjection);
 
+    M3DVector3f cameraPos;
+    m3dLoadVector3(cameraPos, -redius_z, 0.0, redius_z);
+    M3DVector3f cameraTarget;
+    m3dLoadVector3(cameraTarget, 0.0, 0.0, 0.0);
+    M3DVector3f cameraUp;
+    m3dLoadVector3(cameraUp, 0.0, 1.0, 0.0);
     
+    M3DVector3f cameraDir;
+    
+    M3DVector3f temp_cv;
+    m3dCopyVector3(temp_cv, cameraTarget);
+    m3dNegateVector3(temp_cv);
+    
+    M3DVector3f n;
+    m3dAddVectors3(n, cameraPos, temp_cv);
+    m3dNormalizeVector3(n);
+    
+    M3DVector3f u; // right
+    m3dCrossProduct3(u, cameraUp, n);
+    m3dNormalizeVector3(u);
+    
+    M3DVector3f v; // up
+    m3dCrossProduct3(v, n, u);
+    
+    M3DVector3f temp_u;
+    m3dCopyVector3(temp_u, u);
+    m3dNegateVector3(temp_u);
+    
+    M3DVector3f temp_v;
+    m3dCopyVector3(temp_v, v);
+    m3dNegateVector3(temp_v);
+    
+    M3DVector3f temp_n;
+    m3dCopyVector3(temp_n, n);
+    m3dNegateVector3(temp_n);
+    
+    M3DMatrix44f matrix = { u[0], v[0], n[0], 0.0f,
+        u[1], v[1], n[1], 0.0f,
+        u[2], v[2], n[2], 0.0f,
+        m3dDotProduct3(temp_u, cameraPos), m3dDotProduct3(temp_v, cameraPos), m3dDotProduct3(temp_n, cameraPos), 1.0f};
+    
+    m3dCopyMatrix44(mViewMatrix, matrix);
+     glUniformMatrix4fv(_v, 1, GL_FALSE,mViewMatrix);
 
+    
 //mViewMatrix
 //    M3DVector3f ev = {0.0, 0.0, 1.0};
 //    M3DVector3f lv = {0.0, 0.0, -1.0};
