@@ -20,7 +20,6 @@
     EAGLContext *_cont;
     GLuint _renderBuffer,_depthRenderBuffer;
     GLuint _frameBuffer;
-    
     GLuint _programY;
     GLuint _positionY;
     GLuint _colorY;
@@ -31,8 +30,6 @@
     GLuint _m;
     GLuint _v;
     GLuint _p;
-
-
 }
 
 @end
@@ -131,7 +128,7 @@ float a = 0;
 
 //float redius = 10.0;
 float redius_z = -10.0;
-
+float speed = 0.05;
 -(void)render:(CADisplayLink*)displayLink
 {
     const char *path = [[[NSBundle mainBundle] pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
@@ -254,12 +251,14 @@ float redius_z = -10.0;
     m3dMakePerspectiveMatrix(mProjection, 45.0 * 3.14 /180.0, 720.0/1280.0, 0.1, 100);
     glUniformMatrix4fv(_p, 1, GL_FALSE,mProjection);
 
+    
     M3DVector3f cameraPos;
-    m3dLoadVector3(cameraPos, redius, 0.0, redius_z);
+    m3dLoadVector3(cameraPos, 0.0, 0.0, 3.0);
     M3DVector3f cameraTarget;
     m3dLoadVector3(cameraTarget, 0.0, 0.0, -1.0);
     M3DVector3f cameraUp;
     m3dLoadVector3(cameraUp, 0.0, 1.0, 0.0);
+    
     
     M3DVector3f cameraDir;
     
@@ -310,10 +309,10 @@ float redius_z = -10.0;
     glUniform1i(_tex, 0);
     
     float arr[] = {
-      0.0,-1.0
+      0.0,-1.0,1.0,0.5,-0.5
     };
     
-    for(unsigned int i = 0; i < 2; i++)
+    for(unsigned int i = 0; i < 5; i++)
     {
         //// Model View  Projection
         M3DMatrix44f _model;
@@ -329,7 +328,7 @@ float redius_z = -10.0;
         //    // rotate
         a += 2.0 * i;
         M3DMatrix44f r_matrix_init;
-        m3dRotationMatrix44(r_matrix_init, m3dDegToRad(a),  1.0, 0.3, 0.5);
+        m3dRotationMatrix44(r_matrix_init, m3dDegToRad(45),  1.0, 0.3, 0.5);
         m3dCopyMatrix44(_model_copy, _model);
         m3dMatrixMultiply44(_model, r_matrix_init, _model_copy);
         //    // tran
@@ -344,7 +343,7 @@ float redius_z = -10.0;
         glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
-         [_cont presentRenderbuffer:_renderBuffer];
+        [_cont presentRenderbuffer:_renderBuffer];
     }
 }
 
