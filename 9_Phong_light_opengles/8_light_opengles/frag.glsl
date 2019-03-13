@@ -9,11 +9,11 @@ void main()
 {
     // 灯光位置 这里写死
     vec3 lightpos = vec3(0.0,2.0,2.0);
-    vec3 viewpos = vec3(0.0,0.0,3.0);
-    float specularStrength = 0.5;
- 
+    vec3 viewpos = vec3(0.0,0.0,3.0); // 观察者位置画也就是眼睛的位置 这里写死
+    float specularStrength = 0.5;  // 镜面高度强度
+  
     
-    float ambientStrength = 0.1; // 环境光因子
+    float ambientStrength = 0.1; // 环境光强度
     vec3 ambient = ambientStrength * lightColor;  // 环境光
     vec3 norm = normalize(Fnormal); // 标准化法线
     vec3 lightDir = normalize(lightpos - FragPos); // 求出灯光位置
