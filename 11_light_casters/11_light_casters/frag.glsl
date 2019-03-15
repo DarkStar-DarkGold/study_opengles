@@ -44,8 +44,8 @@ void main()
         vec3 diffuse = diffLight * dif * texture2D(diff,texCoord).rgb;
         //specular
         vec3 viewDir = normalize(viewpos - FragPos); // 视线向量
-        vec3 reflectDir = reflect(-lightDir, Fnormal); // 对应的沿着法线轴的反射向量：
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0); // 256 高光的反光度  越大高光点越小！
+        vec3 reflectDir = reflect(-lightDir, norm); // 对应的沿着法线轴的反射向量：
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 4.0); // 256 高光的反光度  越大高光点越小！
         vec3 specular = speLight * spec * (texture2D(tex1,texCoord).rgb);
         // attenuation
         float dis   = length(lightpos - FragPos);
@@ -55,6 +55,9 @@ void main()
 //        ambient *= attenuation;
         diffuse *= attenuation;
         specular *= attenuation;
+        //ambient =vec3(0.,0.,0.);
+        //diffuse =vec3(0.,0.,0.);
+//        specular =vec3(0.,0.,0.);
         
         vec3 result = ambient + diffuse + specular;
         gl_FragColor = vec4(result,1.0);

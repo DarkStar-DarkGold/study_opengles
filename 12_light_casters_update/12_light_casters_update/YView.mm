@@ -51,6 +51,7 @@
     
     GLuint _fangxiang;
     GLuint _cutoff;
+    GLuint _outcutoff;
 
     GLuint _timodel;
 }
@@ -160,7 +161,7 @@ float a = 0;
     
     _fangxiang = glGetUniformLocation(_programY, "fangxiang");
     _cutoff = glGetUniformLocation(_programY, "cutoff");
-    
+    _outcutoff  = glGetUniformLocation(_programY, "outcutoff");
     _timodel = glGetUniformLocation(_programY, "timodel");
 }
 
@@ -345,6 +346,8 @@ float redius_z = 0.0;
     */
     glUniform3fv(_fangxiang, 1, cameraTarget);
     glUniform1f(_cutoff, cos(12.5));
+    glUniform1f(_outcutoff, cos(17.5));
+
 //     M3DVector3f directionL = {-2.0,-1.0,-0.3};
 //    glUniform3fv(_direction, 1, directionL);
     
@@ -378,7 +381,7 @@ float redius_z = 0.0;
     // scale
     M3DMatrix44f s;
     m3dLoadIdentity44(s);
-    m3dScaleMatrix44(s, 0.5,0.5,0.5);
+    m3dScaleMatrix44(s, 1.0,1.0,1.0);
     m3dCopyMatrix44(_model_copy, _model);
     m3dMatrixMultiply44(_model, s, _model_copy);
     //    // rotate
@@ -390,7 +393,7 @@ float redius_z = 0.0;
     //    // tran
     M3DMatrix44f translation_init;
     m3dLoadIdentity44(translation_init);
-    m3dTranslationMatrix44(translation_init,-0.0,0.0,0.);
+    m3dTranslationMatrix44(translation_init,0.0,0.0,0.);
     m3dCopyMatrix44(_model_copy, _model);
     m3dMatrixMultiply44(_model, translation_init, _model_copy);
     

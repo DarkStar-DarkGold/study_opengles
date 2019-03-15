@@ -30,7 +30,7 @@
     GLuint _tex;
     GLuint _tex1;
     GLuint _emission_tex;
-
+    GLuint _timodel;
 
     GLuint _m;
     GLuint _v;
@@ -151,6 +151,8 @@ float a = 0;
     _ambLight = glGetUniformLocation(_programY, "ambLight");
     _diffLight = glGetUniformLocation(_programY, "diffLight");
     _speLight = glGetUniformLocation(_programY, "speLight");
+    
+    _timodel = glGetUniformLocation(_programY, "timodel");
 }
 
 -(void)setLightProgram{
@@ -243,7 +245,7 @@ float redius_z = 0.0;
     m3dMakePerspectiveMatrix(mProjection, 45.0 * 3.14 /180.0, 720.0/1280.0, 0.1, 1000);
 
     M3DVector3f cameraPos;
-    m3dLoadVector3(cameraPos, 0.0, 0.0, 8.0);
+    m3dLoadVector3(cameraPos, 0.0, 0.0, 3.0);
     M3DVector3f cameraTarget;
     m3dLoadVector3(cameraTarget, 0.0, 0.0, -1.0);
     M3DVector3f cameraUp;
@@ -319,7 +321,7 @@ float redius_z = 0.0;
     // scale
     M3DMatrix44f s;
     m3dLoadIdentity44(s);
-    m3dScaleMatrix44(s, 2.0,2.0,2.0);
+    m3dScaleMatrix44(s, 0.5,0.5,0.5);
     m3dCopyMatrix44(_model_copy, _model);
     m3dMatrixMultiply44(_model, s, _model_copy);
     //    // rotate
@@ -334,10 +336,28 @@ float redius_z = 0.0;
     m3dCopyMatrix44(_model_copy, _model);
     m3dMatrixMultiply44(_model, translation_init, _model_copy);
     
+    M3DMatrix44f inverse_model_;
+    M3DMatrix44f trans_inverse_model_;
+    M3DMatrix33f timodel33;
+    
+    m3dLoadIdentity44(inverse_model_);
+    m3dLoadIdentity44(trans_inverse_model_);
+    m3dInvertMatrix44(inverse_model_, _model);
+    m3dLoadIdentity33(timodel33);
+    for (int i=0; i<4; i++) {
+        for (int j=0; j<4; j++) {
+            trans_inverse_model_[i*4+j]=inverse_model_[j*4+i];
+        }
+    }
+    int ind[]={0,1,2,4,5,6,8,9,10};
+    for (int i=0; i<9; i++) {
+        timodel33[i]=trans_inverse_model_[ind[i]];
+    }
+   
     glUniformMatrix4fv(_v, 1, GL_FALSE,mViewMatrix);
     glUniformMatrix4fv(_p, 1, GL_FALSE,mProjection);
     glUniformMatrix4fv(_m, 1, GL_FALSE, _model);
-
+    glUniformMatrix3fv(_timodel, 1, 0, timodel33);
     //////////////////
     M3DVector3f amb_1 = {1.0f, 0.5f, 0.31f};
     M3DVector3f diff_1 = {1.0f, 0.5f, 0.31f};
