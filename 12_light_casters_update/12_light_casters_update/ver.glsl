@@ -15,7 +15,7 @@ uniform mat4 Projection;
 
 void main()
 {
-    Fnormal =  timodel *  Onormal;
+    Fnormal =   Onormal;
 //    Fnormal = vec3(Model_M * vec4(Onormal,1.0));
     FragPos = vec3(Model_M * vec4(Yposition, 1.0));
     gl_Position =   Projection * View * Model_M * vec4(Yposition,1.0);
