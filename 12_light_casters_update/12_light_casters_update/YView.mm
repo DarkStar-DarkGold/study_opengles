@@ -203,7 +203,7 @@ float redius_z = 0.0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     glEnable(GL_DEPTH_TEST);
-
+    glStencilMask();
     float points[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -255,7 +255,7 @@ float redius_z = 0.0;
     m3dMakePerspectiveMatrix(mProjection, 45.0 * 3.14 /180.0, 720.0/1280.0, 0.1, 100);
 
     M3DVector3f cameraPos;
-    m3dLoadVector3(cameraPos, 0.0, 0.0, 3.0);
+    m3dLoadVector3(cameraPos, 0.0, 0.0, 8.0);
     M3DVector3f cameraTarget;
     m3dLoadVector3(cameraTarget, 0.0, 0.0, -1.0);
     M3DVector3f cameraUp;
