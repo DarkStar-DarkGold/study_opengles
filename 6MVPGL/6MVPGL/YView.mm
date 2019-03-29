@@ -32,7 +32,7 @@
     GLuint _m;
     GLuint _v;
     GLuint _p;
-
+    GLuint texture0;
 
 }
 
@@ -49,8 +49,12 @@ float a = 0;
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
+
         [self setupLayer];
         [self setupContext];
+        const char *path = [[[NSBundle mainBundle] pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
+        GLuint texture0 = KYTexture::getTextureId(path);
+        
         [self setupDepthBuffer];
         [self setupRenderBuffer];
         [self setupFrameBuffer];
@@ -136,8 +140,7 @@ float redius_z = -10.0;
 
 -(void)render:(CADisplayLink*)displayLink
 {
-    const char *path = [[[NSBundle mainBundle] pathForResource:@"test2Ret" ofType:@".jpg"] UTF8String];
-    GLuint texture0 = KYTexture::getTextureId(path);
+   
     glClearColor(0.0, 0.3, 0.3, 0.4);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -333,7 +336,7 @@ float redius_z = -10.0;
      glUniformMatrix4fv(_v, 1, GL_FALSE,mViewMatrix);
 
     
-//mViewMatrix
+//    mViewMatrix
 //    M3DVector3f ev = {0.0, 0.0, 1.0};
 //    M3DVector3f lv = {0.0, 0.0, -1.0};
 //    M3DVector3f uv = {0.0, 1.0, 0.0};
@@ -384,7 +387,7 @@ float redius_z = -10.0;
 //
 //    M3DMatrix44f vp;
 //    m3dMatrixMultiply44(vp,mProjectionMatrix, mViewMatrix);
-//
+
     
 //    M3DMatrix44f mvp;
 //    m3dMatrixMultiply44(mvp, vp, _model);
